@@ -1,46 +1,42 @@
 
+
 name: Build GOOL APK
 
 on:
   push:
-    branches:
-      - main
-      - master
-      - principal
+    branches: [main]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Get source code
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Install Java
         uses: actions/setup-java@v4
         with:
-          distribution: zulu
+          distribution: temurin
           java-version: '17'
 
-      - name: Setup Flutter
+      - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          cache: true
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Create Android project files
+        run: flutter create --platforms=android .
 
-      - name: Check Flutter project
-        run: flutter analyze
+      - name: Add HTTP package
+        run: flutter pub add http
 
       - name: Build GOOL APK
         run: flutter build apk --release
 
-      - name: Upload APK
+      - name: Save APK
         uses: actions/upload-artifact@v4
         with:
           name: GOOL-APK
           path: build/app/outputs/flutter-apk/app-release.apk
-          if-no-files-found: error
-          retention-days: 7
