@@ -1,8 +1,13 @@
-name: Build Flutter APK
+
+
+name: Build GOOL APK
 
 on:
   push:
-    branches: [ main, master, principal ]
+    branches:
+      - main
+      - master
+      - principal
   workflow_dispatch:
 
 jobs:
@@ -16,26 +21,31 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: zulu
           java-version: '17'
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: stable
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK
+      - name: Check Flutter project
+        run: flutter analyze
+
+      - name: Build GOOL APK
         run: flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
+          name: GOOL-APK
           path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 7
 
 
 
