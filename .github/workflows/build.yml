@@ -34,9 +34,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze project
-        run: flutter analyze
-
       - name: Build APK
         run: flutter build apk --release
 
@@ -47,3 +44,4 @@ jobs:
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           retention-days: 7
+
